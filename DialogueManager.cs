@@ -5,18 +5,23 @@ using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
-    private Queue<string> sentences;
-    public TextMeshProUGUI dialogueText;
-    public GameObject contButton;
     [SerializeField] private float typeSpeed;
+    [SerializeField] private Transform DialogueWindow;
+    private Queue<string> sentences;
+    private TextMeshProUGUI dialogueText;
+    private Transform contButton;
 
     void Start()
     {
         sentences = new Queue<string>();
+        dialogueText = DialogueWindow.Find("DialogueText").GetComponent<TextMeshProUGUI>();
+        contButton = DialogueWindow.Find("Button");
+
     }
 
     public void StartDialogue(Dialogue dialogue)
     {
+        DialogueWindow.gameObject.SetActive(true);
         sentences.Clear();
 
         foreach (string sentence in dialogue.sentences)
@@ -28,7 +33,7 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
-        contButton.SetActive(false);
+        contButton.gameObject.SetActive(false);
         if(sentences.Count == 0)
         {
             EndDialogue();
@@ -47,12 +52,12 @@ public class DialogueManager : MonoBehaviour
             dialogueText.text += letter;
             yield return new WaitForSeconds(typeSpeed);
         }
-        contButton.SetActive(true);
+        contButton.gameObject.SetActive(true);
     }
 
     void EndDialogue()
     {
-        contButton.SetActive(false);
+        DialogueWindow.gameObject.SetActive(false);
         dialogueText.text = "";
     }
 }
